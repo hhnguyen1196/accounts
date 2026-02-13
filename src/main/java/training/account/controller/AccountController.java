@@ -1,9 +1,11 @@
 package training.account.controller;
 
+import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.CollectionUtils;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import training.account.constants.AccountConstants;
 import training.account.dto.CustomerDTO;
@@ -15,6 +17,7 @@ import training.account.utils.ValidateUtils;
 import java.util.List;
 import java.util.Map;
 
+@Validated
 @RestController
 @AllArgsConstructor
 public class AccountController {
@@ -35,7 +38,8 @@ public class AccountController {
     }
 
     @GetMapping("/fetch")
-    public ResponseEntity<CustomerDTO> fetchAccountDetails(@RequestParam String mobileNumber) {
+    public ResponseEntity<CustomerDTO> fetchAccountDetails(@RequestParam @Pattern(regexp = "(^$|[0-9]{10})",
+            message = "Mobile number must be 10 digits") String mobileNumber) {
         return ResponseEntity.ok(accountService.fetchAccount(mobileNumber));
     }
 
@@ -51,7 +55,8 @@ public class AccountController {
     }
 
     @DeleteMapping("/delete")
-    public ResponseEntity<ResponseDTO> deleteAccountDetails(@RequestParam String mobileNumber) {
+    public ResponseEntity<ResponseDTO> deleteAccountDetails(@RequestParam @Pattern(regexp = "(^$|[0-9]{10})",
+            message = "Mobile number must be 10 digits") String mobileNumber) {
         boolean isDeleted = accountService.deleteAccount(mobileNumber);
         if (isDeleted) {
             return ResponseEntity.ok(new ResponseDTO(AccountConstants.STATUS_200, AccountConstants.MESSAGE_200));

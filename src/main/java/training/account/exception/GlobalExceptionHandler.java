@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
+import training.account.constants.ResponseConstants;
 import training.account.dto.ErrorResponseDTO;
 
 import java.time.LocalDateTime;
@@ -41,6 +42,6 @@ public class GlobalExceptionHandler {
         log.error(e.getMessage(), Objects.nonNull(e.getCause()) ? e.getCause() : e);
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
-                .body(Collections.singletonMap("error", e.getErrors()));
+                .body(Collections.singletonMap(ResponseConstants.ERRORS, e.getErrors()));
     }
 }
